@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Member">
+
+	<select id="login" parameterType="com.example.vo.MemberVO"
+		resultType="com.example.vo.MemberVO">
+		SELECT USERID, USERNAME, PHONE
+		FROM MEMBER
+		WHERE USERID=#{userid} AND PASSWORD=#{password}
+	</select>
+
+	<insert id="join" parameterType="com.example.vo.MemberVO">
+		INSERT INTO MEMBER(USERID,
+		PASSWORD, USERNAME, PHONE, USERAGE, JOINDATE)
+		VALUES( #{userid}, #{password}, #{username}, #{phone}, #{userage}, SYSDATE)
+	</insert>
+
+	<update id="editmember" parameterType="com.example.vo.MemberVO">
+		UPDATE MEMBER SET
+		USERNAME=#{username}, PHONE=#{phone} WHERE USERID=#{userid}
+	</update>
+
+	<delete id="delmember" parameterType="com.example.vo.MemberVO">
+		DELETE FROM MEMBER WHERE
+		USERID=#{userid}
+	</delete>
+
+	<select id="memberOne" parameterType="com.example.vo.MemberVO"
+		resultType="com.example.vo.MemberVO">
+		SELECT * FROM MEMBER WHERE USERId=#{userid}
+	</select>
+
+	<select id="memberList" resultType="com.example.vo.MemberVO">
+		SELECT * FROM MEMBER
+	</select>
+
+</mapper>

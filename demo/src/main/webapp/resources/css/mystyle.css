@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+.box1 {
+	width: 500px;
+	heigt: 300px;
+	border: 1px solid #cccccc;
+	padding: 20px;
+}
+
+.box2 {
+	width: 500px;
+	heigt: 300px;
+	border: 1px solid #cccccc;
+	padding: 20px;
+}

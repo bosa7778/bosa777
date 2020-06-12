@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Board">
+
+	<resultMap type="com.example.vo.BoardVO" id="img1">
+		<result column="BRD_NO" property="brd_no"/>
+		<result column="BRD_IMG" property="brd_img" 
+			jdbcType="BLOB" javaType="[B"/>
+	</resultMap>
+
+
+	<select id="selectBoardImg" parameterType="int" resultMap="img1">
+		SELECT BRD_NO, BRD_IMG FROM BOARD 
+		WHERE BRD_NO = #{no}
+	</select>
+
+
+	<select id="selectBoardImg" parameterType="int" resultMap="img1">
+		SELECT BRD_NO, BRD_IMG FROM BOARD 
+		WHERE BRD_NO = #{brd_no}
+	</select>
+	
+	
+
+	<insert id="insertBoard" parameterType="com.example.vo.BoardVO">
+		INSERT INTO BOARD(BRD_NO, BRD_TITLE, BRD_CONTENT,
+			BRD_IMG, BRD_ID, BRD_HIT, BRD_DATE) 
+		VALUES (SEQ_BOARD_NO.NEXTVAL, #{brd_title}, #{brd_content}, 
+			#{brd_img, jdbcType=BLOB}, #{brd_id}, #{brd_hit}, SYSDATE )
+	</insert>
+	
+	<select id="selectList" parameterType="map" 
+			resultType="com.example.vo.BoardVO">
+		SELECT * FROM
+			(SELECT 
+				BRD_NO, BRD_TITLE, BRD_ID, BRD_HIT, BRD_DATE, 
+				ROW_NUMBER() OVER (ORDER BY BRD_NO DESC) ROWN 
+			FROM 
+				BOARD)
+		WHERE ROWN BETWEEN #{start} AND #{end}		 
+	</select>
+
+	<select id="count" resultType="int">
+		SELECT COUNT(*) FROM BOARD
+	</select>
+	
+	<select id="selectBoardOne" parameterType="int" 
+			resultType="com.example.vo.BoardVO">
+		SELECT * FROM BOARD WHERE BRD_NO = #{no} 
+	</select>
+	
+	<update id="updateHit" parameterType="int">
+		UPDATE BOARD SET BRD_HIT = BRD_HIT + 46
+		WHERE BRD_NO = #{no}
+	</update>
+</mapper>

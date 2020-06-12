@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Item">
+
+	<select id="selectList" resultType="com.example.vo.ItemVO">
+		SELECT * FROM ITEM ORDER BY ITEMNO DESC
+	</select>
+
+	<select id="selectOne" parameterType="int" resultType="com.example.vo.ItemVO">
+		SELECT * FROM ITEM WHERE ITEMNO = #{no}
+	</select>
+
+	<select id="selectItemSearch" parameterType="String" resultType="com.example.vo.ItemVO">
+		SELECT * FROM ITEM WHERE ITEMNAME LIKE '%' || #{txt} || '%'
+	</select>
+	
+	<insert id="insertItemBatch" parameterType="java.util.List">
+		INSERT ALL
+			<foreach collection="list" item="obj" separator=" ">
+    		INTO ITEM(ITEMNO, ITEMNAME, ITEMPRICE, ITEMQTY, ITEMDES, ITEMDATE)
+        		VALUES(MY_GET_SEQ_NUMBER, #{obj.itemname}, 
+        			#{obj.itemprice}, #{obj.itemqty}, #{obj.itemdes}, SYSDATE)
+        	</foreach>
+		SELECT * FROM DUAL
+	</insert>
+	
+	<delete id="deleteItemBatch" parameterType="int">
+		DELETE FROM ITEM WHERE ITEMNO IN(
+		<foreach collection="array" item="tmp" separator=","> 
+			#{tmp}
+		</foreach>
+		)
+	</delete>
+	
+	<select id="selectItemWhere" resultType="com.example.vo.ItemVO"  
+			parameterType="int">
+		SELECT * FROM ITEM WHERE ITEMNO IN(
+		<foreach collection="array" item="tmp" separator=","> 
+			#{tmp}
+		</foreach>
+		)
+	</select>
+	
+	<update id="updateItemBatch" parameterType="java.util.List">
+		UPDATE ITEM SET
+	    itemname=(
+	        CASE 
+	        <foreach collection="list" item="obj" separator=" ">
+	            WHEN itemno=#{obj.itemno} THEN #{obj.itemname}
+	        </foreach>    
+	        END
+	    ),
+	    itemprice=(
+	        CASE 
+	        <foreach collection="list" item="obj" separator=" ">
+	            WHEN itemno=#{obj.itemno} THEN #{obj.itemprice}
+	        </foreach>
+	        END
+	    ),
+	    itemqty=(
+	        CASE 
+	        <foreach collection="list" item="obj" separator=" ">
+	            WHEN itemno=#{obj.itemno} THEN #{obj.itemqty}
+	        </foreach>
+	        END
+	    ),
+	    itemdes=(
+	        CASE 
+	        <foreach collection="list" item="obj" separator=" ">
+	            WHEN itemno=#{obj.itemno} THEN #{obj.itemdes}
+	        </foreach>
+	        END
+	    )
+		WHERE itemno IN (
+			<foreach collection="list" item="obj" separator=",">
+	            #{obj.itemno}
+	        </foreach>
+		)
+	</update>
+	
+</mapper>
