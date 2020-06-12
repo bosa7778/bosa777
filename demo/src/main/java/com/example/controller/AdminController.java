@@ -39,6 +39,9 @@ public class AdminController {
 	}
 	
 	
+	
+	
+	
 	@RequestMapping(value="/itemupdate", method = RequestMethod.POST)
 	public String itemupdatepost(
 			@RequestParam(value = "no[]") int[] no,
